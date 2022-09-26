@@ -12,7 +12,7 @@ eventListeners();
 
 function eventListeners(){
     form.addEventListener("submit", addTodo);
-
+    document.addEventListener("DOMContentLoaded", loadAllTodosToUI);
 
 
 
@@ -35,6 +35,14 @@ function addTodo(e){
     
 
     e.preventDefault();
+}
+
+function loadAllTodosToUI(){
+    let todos = getTodosFromStorage();
+
+    todos.forEach(function(todo){
+        addTodoToUI(todo);
+    })
 }
 
 function getTodosFromStorage(){ // Storageden todoları alma
