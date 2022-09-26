@@ -14,9 +14,7 @@ function eventListeners(){
     form.addEventListener("submit", addTodo);
     document.addEventListener("DOMContentLoaded", loadAllTodosToUI);
     secondCardBody.addEventListener("click", deleteTodo);
-
-
-
+    filter.addEventListener("keyup", filterTodos);
 }
 
 function addTodo(e){
@@ -31,23 +29,30 @@ function addTodo(e){
         showAlert("success", "Başarı ile eklenmiştir.")
     }
     
-   
-
-    
-
     e.preventDefault();
 }
 
-function deleteTodo(e){
-    
-    if(e.target.className === "fa fa-remove"){
+function filterTodos(e){
+    const filterValue = e.target.value.toLowerCase();
+    const listItems = document.querySelectorAll(".list-group-item");
 
+    listItems.forEach(function(listItem){
+        const text = listItem.textContent.toLowerCase();
+        if (text.indexOf(filterValue) === -1){
+            listItem.setAttribute("style", "display : none !important")
+        }
+        else{
+            listItem.setAttribute("style", "display : block")
+        }
+    })
+}
+
+function deleteTodo(e){
+    if(e.target.className === "fa fa-remove"){
         e.target.parentElement.parentElement.remove();
         deleteTodoFromStorage(e.target.parentElement.parentElement.textContent);
         showAlert("success", "Todo Başarı ile Silindi")
-    }
-
-    
+    }  
 }
 
 function deleteTodoFromStorage(deletetodo) {
@@ -57,7 +62,6 @@ function deleteTodoFromStorage(deletetodo) {
             todos.splice(index, 1);
         }
     });
-
     localStorage.setItem("todos", JSON.stringify(todos));
 }
 
@@ -99,8 +103,6 @@ function showAlert(type, message){
     window.setTimeout(function(){
         alert.remove();
     }, 1000);
-
-
 }
 
 function addTodoToUI(newTodo){ // String değerini list item olarak UI'ya ekleyecek.
@@ -123,5 +125,4 @@ function addTodoToUI(newTodo){ // String değerini list item olarak UI'ya ekleye
     // Todo List'e List Item'ı ekleme
     todoList.appendChild(listItem);
     todoInput.value = "";
-
 }
