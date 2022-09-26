@@ -21,18 +21,12 @@ function eventListeners(){
 function addTodo(e){
     const newTodo = todoInput.value.trim();
 
-    // <div 
-    // class="alert alert-danger" role="alert">
-    // A simple warning alert—check it out!
-    // </div>
-
-
-
     if (newTodo === ""){
         showAlert("danger", "Lütfen bir todo girin.");
     }
     else {
         addTodoToUI(newTodo);
+        addTodoToStorage(newTodo);
         showAlert("success", "Başarı ile eklenmiştir.")
     }
     
@@ -41,6 +35,25 @@ function addTodo(e){
     
 
     e.preventDefault();
+}
+
+function getTodosFromStorage(){ // Storageden todoları alma
+    let todos;
+    if (localStorage.getItem("todos") === null){
+        todos = [];
+    }
+    else {
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    return todos;
+}
+
+function addTodoToStorage(newTodo){
+    let todos = getTodosFromStorage();
+
+    todos.push(newTodo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+
 }
 
 function showAlert(type, message){
